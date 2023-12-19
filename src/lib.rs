@@ -6,12 +6,12 @@ mod jni {
 
     #[derive(Signature)]
     #[package(com.example.robusta)]
-    struct HelloWorld;
+    struct Rust;
 
-    impl HelloWorld {
-        pub extern "jni" fn special(mut input1: Vec<i32>, input2: i32) -> Vec<String> {
-            input1.push(input2);
-            input1.iter().map(ToString::to_string).collect()
+    impl Rust {
+        pub extern "jni" fn toYaml(json: String) -> String {
+            let json_value: serde_json::Value = serde_json::from_str(&json).expect("JSON parsing failed");
+            serde_yaml::to_string(&json_value).expect("YAML conversion failed")
         }
     }
 }
