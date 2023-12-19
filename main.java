@@ -28,15 +28,22 @@ class Rust {
         }
         """;
 
-        if (args.length > 0 && "fail".equals(args[0])) {
-            input = input + "💩";
-        }
-
-        String output = "";
-        if (args.length > 1 && "boom".equals(args[1])) {
-            output = Rust.toYamlBoom(input);
-        } else {
-            output = Rust.toYaml(input);
+        String output = "";    
+        if (args.length > 0) {
+            switch (args[0]) {
+                case "fail":
+                    input = input + "💩";
+                    output = Rust.toYaml(input);
+                    break;
+                case "boom":
+                    boom();
+                    break;
+                case "wrapped":
+                    wrapped();
+                    break;
+                default:
+                    output = "unknown argument passed";
+            }
         }
 
         System.out.println("\nConverted JSON to YAML");
@@ -46,5 +53,31 @@ class Rust {
 
         System.out.println("Output YAML:");
         System.out.println(output);
+    }
+
+    public static void boom() {
+        Rust.toYamlBoom("💩");
+    }
+
+    public static void wrapped() {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Future<Void> future = executor.submit(new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
+                Rust.toYamlBoom("💩");
+                return null;
+            }
+        });
+
+        try {
+            future.get();
+        } catch (ExecutionException e) {
+            System.out.println("** RuntimeException from thread ");
+            e.getCause().printStackTrace(System.out);
+        } catch (InterruptedException e) {
+            ; // pass
+        }
+
+        executor.shutdown();
     }
 }

@@ -21,5 +21,5 @@ This will pass bad JSON to the rust function, but since the rust function is wri
 You must write good code or your thread will panic. To see this run
 
 ```sh
-./run.sh fail boom
+./run.sh boom
 ```
