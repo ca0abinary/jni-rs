@@ -1,9 +1,11 @@
 package com.example.robusta;
 
 import java.util.*;
+import java.util.concurrent.*;
 
 class Rust {
     private static native String toYaml(String json);
+    private static native String toYamlBoom(String json);
 
     static {
         System.loadLibrary("jni_test");
@@ -25,9 +27,19 @@ class Rust {
             }]
         }
         """;
-        String output = Rust.toYaml(input);
 
-        System.out.println("Converted JSON to YAML");
+        if (args.length > 0 && "fail".equals(args[0])) {
+            input = input + "💩";
+        }
+
+        String output = "";
+        if (args.length > 1 && "boom".equals(args[1])) {
+            output = Rust.toYamlBoom(input);
+        } else {
+            output = Rust.toYaml(input);
+        }
+
+        System.out.println("\nConverted JSON to YAML");
 
         System.out.println("Input JSON:");
         System.out.println(input);

@@ -10,8 +10,18 @@ mod jni {
 
     impl Rust {
         pub extern "jni" fn toYaml(json: String) -> String {
-            let json_value: serde_json::Value = serde_json::from_str(&json).expect("JSON parsing failed");
-            serde_yaml::to_string(&json_value).expect("YAML conversion failed")
+            match serde_json::from_str::<serde_json::Value>(&json) {
+                Ok(v) => match serde_yaml::to_string(&v) {
+                    Ok(r) => r,
+                    Err(_) => String::from("")
+                },
+                Err(_) => String::from("")
+            }
+        }
+
+        pub extern "jni" fn toYamlBoom(json: String) -> String {
+            let v = serde_json::from_str::<serde_json::Value>(&json).expect("Bad json");
+            serde_yaml::to_string(&v).expect("YAML conversion error")
         }
     }
 }
