@@ -1,6 +1,8 @@
 package com.example.robusta;
 
+import java.io.*;
 import java.util.concurrent.*;
+import java.util.stream.Collectors;
 
 class Rust {
     private static native String toYaml(String json);
@@ -11,38 +13,22 @@ class Rust {
     }
 
     public static void main(String[] args) {
-        var input = """
-        {
-            "hello": "world",
-            "some_int": 123,
-            "some_double": 12.3,
-            "complex_type_array": [{
-                "id": 1,
-                "name": "John Doe",
-                "occupations": ["computer programmer"]
-            }, {
-                "id": 2,
-                "name": "Jane Doe"
-            }]
-        }
-        """;
+        var output = "";
+        var input = getStdIn();
+        var mode = (args.length > 0) ? args[0] : "";
 
-        var output = "";    
-        if (args.length > 0) {
-            switch (args[0]) {
-                case "fail":
-                    input = "💩";
-                    output = Rust.toYaml(input);
-                    break;
-                case "boom":
-                    input = "💩";
-                    Rust.toYamlBoom(input);
-                    break;
-                default:
-                    break;
-            }
-        } else {
-            output = Rust.toYaml(input);
+        switch (mode) {
+            case "fail":
+                input = "💩";
+                output = Rust.toYaml(input);
+                break;
+            case "boom":
+                input = "💩";
+                Rust.toYamlBoom(input);
+                break;
+            default:
+                output = Rust.toYaml(input);
+                break;
         }
 
         System.out.println("\nConverted JSON to YAML");
@@ -52,5 +38,10 @@ class Rust {
 
         System.out.println("Output YAML:");
         System.out.println(output);
+    }
+
+    public static String getStdIn() {
+        var reader = new BufferedReader(new InputStreamReader(System.in));
+        return reader.lines().collect(Collectors.joining());
     }
 }

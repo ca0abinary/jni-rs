@@ -2,4 +2,4 @@
 set -e
 
 cargo build
-$JAVA_HOME/bin/java -Djava.library.path=$(pwd)/target/debug main.java $@
+cat test_data.json | $JAVA_HOME/bin/java -Djava.library.path=$(pwd)/target/debug main.java $@
