@@ -23,3 +23,5 @@ You must write good code or your thread will panic. To see this run
 ```sh
 ./run.sh boom
 ```
+
+It is not possible as far as I can tell to wrap the native call, so you must write perfect native interfaces or have another way to handle those crashes. Rust was chosen to demonstrate the native interface in this codebase because the language and compiler work together to help reduce the chances of bad code.

@@ -1,6 +1,5 @@
 package com.example.robusta;
 
-import java.util.*;
 import java.util.concurrent.*;
 
 class Rust {
@@ -12,7 +11,7 @@ class Rust {
     }
 
     public static void main(String[] args) {
-        String input = """
+        var input = """
         {
             "hello": "world",
             "some_int": 123,
@@ -28,22 +27,22 @@ class Rust {
         }
         """;
 
-        String output = "";    
+        var output = "";    
         if (args.length > 0) {
             switch (args[0]) {
                 case "fail":
-                    input = input + "💩";
+                    input = "💩";
                     output = Rust.toYaml(input);
                     break;
                 case "boom":
-                    boom();
-                    break;
-                case "wrapped":
-                    wrapped();
+                    input = "💩";
+                    Rust.toYamlBoom(input);
                     break;
                 default:
-                    output = "unknown argument passed";
+                    break;
             }
+        } else {
+            output = Rust.toYaml(input);
         }
 
         System.out.println("\nConverted JSON to YAML");
@@ -53,31 +52,5 @@ class Rust {
 
         System.out.println("Output YAML:");
         System.out.println(output);
-    }
-
-    public static void boom() {
-        Rust.toYamlBoom("💩");
-    }
-
-    public static void wrapped() {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        Future<Void> future = executor.submit(new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                Rust.toYamlBoom("💩");
-                return null;
-            }
-        });
-
-        try {
-            future.get();
-        } catch (ExecutionException e) {
-            System.out.println("** RuntimeException from thread ");
-            e.getCause().printStackTrace(System.out);
-        } catch (InterruptedException e) {
-            ; // pass
-        }
-
-        executor.shutdown();
     }
 }
