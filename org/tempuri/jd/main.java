@@ -1,12 +1,11 @@
-package com.example.robusta;
+package org.tempuri.jd;
 
 import java.io.*;
-import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 class Rust {
-    private static native String toYaml(String json);
-    private static native String toYamlBoom(String json);
+    private static native String x12TransformFormat(String x12);
+    private static native String goBoom(String json);
 
     static {
         System.loadLibrary("jni_test");
@@ -20,23 +19,21 @@ class Rust {
         switch (mode) {
             case "fail":
                 input = "💩";
-                output = Rust.toYaml(input);
+                output = Rust.x12TransformFormat(input);
                 break;
             case "boom":
                 input = "💩";
-                Rust.toYamlBoom(input);
+                Rust.goBoom(input);
                 break;
             default:
-                output = Rust.toYaml(input);
+                output = Rust.x12TransformFormat(input);
                 break;
         }
 
-        System.out.println("\nConverted JSON to YAML");
-
-        System.out.println("Input JSON:");
+        System.out.println("Input:");
         System.out.println(input);
 
-        System.out.println("Output YAML:");
+        System.out.println("Output:");
         System.out.println(output);
     }
 

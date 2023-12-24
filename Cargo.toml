@@ -7,6 +7,7 @@ edition = "2021"
 crate-type = ["cdylib"]
 
 [dependencies]
+edi = "0.2.0"
 robusta_jni = "0.2.2"
 serde_json = "1.0.108"
 serde_yaml = "0.9.27"

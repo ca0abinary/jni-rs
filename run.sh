@@ -8,4 +8,4 @@ if [ -z "$JAVA_CMD" ]; then
 fi
 
 cargo build
-cat test_data.json | $JAVA_CMD -Djava.library.path=$(pwd)/target/debug main.java $@
+cat sample.x12 | $JAVA_CMD -Djava.library.path=$(pwd)/target/debug org/tempuri/jd/main.java $@
